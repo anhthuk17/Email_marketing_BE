@@ -1,37 +1,31 @@
 const Sequelize = require("sequelize");
 const db = require("../config");
 
-const Customer = db.define("customer", {
-    id_cus: {
+const Compaign = db.define("compaign", {
+    id_compaign: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name_cus: {
+    name_compaign: {
         type: Sequelize.STRING
     },
-    address_cus: {
-        type: Sequelize.STRING
-    },
-    email_cus: {
-        type: Sequelize.STRING
-    },
-    phone_cus: {
-        type: Sequelize.INTEGER
-    },
-    status_cus: {
+    status: {
         type: Sequelize.BOOLEAN
     },
-    gender_cus: {
+    createOfDate_compaign: {
+        type: Sequelize.DATE
+    },
+    updateOfDate_compaign: {
+        type: Sequelize.DATE
+    },
+    id_tem: {
+        type: Sequelize.INTEGER
+    },
+    content_tem: {
         type: Sequelize.STRING
     },
     id_com: {
-        type: Sequelize.INTEGER
-    },
-    type_cus: {
-        type: Sequelize.STRING
-    },
-    age_cus: {
         type: Sequelize.INTEGER
     }
 }, {
@@ -39,4 +33,4 @@ const Customer = db.define("customer", {
     freezeTableName: true
 });
 
-module.exports = Customer;
+module.exports = Compaign;

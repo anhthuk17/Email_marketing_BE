@@ -1,4 +1,8 @@
 const customer = require('./customer.route')
+const template = require('./template.route')
+const compaign = require('./compaign.route')
+const cus_compaign = require('./cus_compaign.route')
+const history = require('./history.route')
     // const nhomsanpham = require('./bk/nhomsanpham.route')
     // const khachhang = require('./bk/khachhang.route')
     // const dangnhap = require('./bk/dangnhap.route')
@@ -20,7 +24,12 @@ let initClientAPI = (app, url) => {
     // /customers method get -> lay customer
     // /customers?id=value method put -> cap nhat customer
     // /customers?id=value method delete -> xoa customer
+
     app.use(url + "customers", customer);
+    app.use(url + "templates", template);
+    app.use(url + "compaigns", compaign);
+    app.use(url + "cus_compaigns", cus_compaign);
+    app.use(url + "histories", history);
     // -> api/customers
     // app.use(url + "categories", nhomsanpham);
     // app.use(url + "customers", khachhang);

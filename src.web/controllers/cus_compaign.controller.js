@@ -1,14 +1,12 @@
-const customer = require('../../database/models/customer');
+const cus_compaign = require('../../database/models/cus_compaign');
 const { ENUM } = require('../../utils/index');
 const { Op, where } = require("sequelize");
 
 module.exports = {
     getOne: async(id) => {
         try {
-            return await customer.findOne({
-                where: {
-                    id_cus: id
-                }
+            return await cus_compaign.findOne({
+                where: {}
             })
         } catch (error) {
             return error
@@ -17,7 +15,7 @@ module.exports = {
     // disable congdichvu
     disable: async(id) => {
         try {
-            return await customer.update({
+            return await cus_compaign.update({
                 trangthai: ENUM.DISABLE
             }, {
                 where: {
@@ -31,7 +29,7 @@ module.exports = {
     // disable congdichvu
     getAll: async() => {
         try {
-            return await customer.findAll({
+            return await cus_compaign.findAll({
                 // where: {
                 //     status_cus: 1 || 0
                 // }
@@ -44,7 +42,7 @@ module.exports = {
     // disable congdichvu
     create: async(body) => {
         try {
-            return await customer.create(body);
+            return await cus_compaign.create(body);
         } catch (error) {
             return error
         }
@@ -52,14 +50,9 @@ module.exports = {
 
     createMultiple: async(body) => {
         try {
-            return await customer.bulkCreate(body);
+            return await cus_compaign.bulkCreate(body);
         } catch (error) {
             return error
         }
     }
-
-
-
-
-
 }

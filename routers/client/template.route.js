@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();;
-const controller = require("../../src.web/controllers/customer.controller");
+const controller = require("../../src.web/controllers/template.controller");
 const response = require('../../utils/api.res/response');
 
 router.get("/", async(req, res) => {

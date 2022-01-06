@@ -1,42 +1,35 @@
 const Sequelize = require("sequelize");
 const db = require("../config");
 
-const Customer = db.define("customer", {
-    id_cus: {
+const History = db.define("history", {
+
+    //  id_his, sendOfDate,content_tem_after_replace, status_action, id_cus,  id_com, id_copaignm,
+    id_his: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name_cus: {
+    sendOfDate: {
+        type: Sequelize.DATE
+    },
+    content_tem_after_replace: {
         type: Sequelize.STRING
     },
-    address_cus: {
-        type: Sequelize.STRING
-    },
-    email_cus: {
-        type: Sequelize.STRING
-    },
-    phone_cus: {
-        type: Sequelize.INTEGER
-    },
-    status_cus: {
+    status_action: {
         type: Sequelize.BOOLEAN
-    },
-    gender_cus: {
-        type: Sequelize.STRING
     },
     id_com: {
         type: Sequelize.INTEGER
     },
-    type_cus: {
-        type: Sequelize.STRING
-    },
-    age_cus: {
+    id_cus: {
         type: Sequelize.INTEGER
-    }
+    },
+    id_compaign: {
+        type: Sequelize.INTEGER
+    },
 }, {
     timestamps: false,
     freezeTableName: true
 });
 
-module.exports = Customer;
+module.exports = History;

@@ -22,7 +22,10 @@
         "jsonwebtoken": "^8.5.1",
         "mssql": "^6.3.1",
         "mysql2": "^2.2.5",
+        "nodemailer": "^6.7.2",
+        "nodemailer-express-handlebars": "^4.0.0",
         "path": "^0.12.7",
+        "pug": "^3.0.2",
         "require-all": "^3.0.0",
         "sequelize": "^5.5.1"
     }

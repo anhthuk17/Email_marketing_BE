@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const port = 3000
 require('dotenv').config()
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -62,3 +63,13 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+app.get('/', (req, res) => {
+    res.send(`
+        <h1 style="color:red;">Hello World!</h1>
+        `)
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`)
+})
