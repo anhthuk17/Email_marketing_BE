@@ -2,8 +2,8 @@ const compaign = require('../../database/models/compaign');
 const { ENUM } = require('../../utils/index');
 const { Op, where, QueryTypes } = require("sequelize");
 const db = require("../../database/config");
-// const mailer = require("../../utils/nodemailer");
 const nodemailer = require("nodemailer");
+const emailExistence = require("email-existence");
 
 
 module.exports = {
@@ -100,13 +100,16 @@ module.exports = {
     getInfToSendMail: async(id_compaign) => {
         try {
             let QUERY = `SELECT 
+            compaign.id_compaign,
             compaign.content_tem,
             compaign.name_compaign,
+            company.id_com,
             company.email_com,
             company.password_com,
             company.address_com,
             company.phone_com,
             company.name_com,
+            customer.id_cus,
             customer.name_cus,
             customer.address_cus,
             customer.email_cus,
@@ -145,46 +148,97 @@ module.exports = {
         }
     },
 
-    getSendMail: async(email_com, password_com, address_com, phone_com, name_com, email_cus, name_cus, phone_cus, address_cus, name_compaign, content_tem) => {
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                // user: 'ngothianhthu161299@gmail.com',
-                user: email_com,
-                // pass: 'thunta@123',
-                pass: password_com,
-            },
-        });
+    getSendMail: async(id_com, email_com, password_com, address_com, phone_com, name_com, id_cus, email_cus, name_cus, phone_cus, address_cus, id_compaign, name_compaign, content_tem) => {
 
-        function replaceAll(str, find, replace) {
-            return str.replace(new RegExp(find, 'g'), replace);
-        }
-        if (content_tem != null) {
-            content_tem = replaceAll(content_tem, "#name#", name_cus)
-            content_tem = replaceAll(content_tem, "#phone#", phone_cus)
-            content_tem = replaceAll(content_tem, "#address#", address_cus)
-            content_tem = replaceAll(content_tem, "#email#", email_cus)
-            content_tem = replaceAll(content_tem, "#com_add#", address_com)
-            content_tem = replaceAll(content_tem, "#com_phone#", phone_com)
-            content_tem = replaceAll(content_tem, "#com_name#", name_com)
+        emailExistence.check(email_cus, function(error, res) {
+            console.log('res: ' + res);
+            if (res == true) {
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        // user: 'ngothianhthu161299@gmail.com',
+                        user: email_com,
+                        // pass: 'thunta@123',
+                        pass: password_com,
+                    },
+                });
 
-        }
+                function replaceAll(str, find, replace) {
+                    return str.replace(new RegExp(find, 'g'), replace);
+                }
+                if (content_tem != null) {
+                    content_tem = replaceAll(content_tem, "#name#", name_cus)
+                    content_tem = replaceAll(content_tem, "#phone#", phone_cus)
+                    content_tem = replaceAll(content_tem, "#address#", address_cus)
+                    content_tem = replaceAll(content_tem, "#email#", email_cus)
+                    content_tem = replaceAll(content_tem, "#com_add#", address_com)
+                    content_tem = replaceAll(content_tem, "#com_phone#", phone_com)
+                    content_tem = replaceAll(content_tem, "#com_name#", name_com)
+                    try {
+                        let QUERY = `INSERT INTO email_marketing.history (sendOfDate, content_tem_after_replace, status_action, id_com, id_cus, id_compaign) 
+                        VALUES ( '2012-01-21 00:00:00', '${content_tem}', 'n', ${id_com}, ${id_cus}, ${id_compaign});`
+                        const data = db.query(QUERY, { type: QueryTypes.SELECT })
+                        let QUERY1 = `SELECT * FROM history ORDER BY id_his DESC LIMIT 0, 1;`
+                        const data1 = db.query(QUERY1, { type: QueryTypes.SELECT })
+                        console.log(data);
+                        console.log(data1);
+                    } catch (error) {
+                        console.log("error:", error);
+                        return error
+                    }
+                }
 
-        let mailOptions = {
-            from: email_com,
-            to: email_cus,
-            subject: name_compaign,
-            text: "Our store's newest products",
-            html: content_tem
-        };
 
-        transporter.sendMail(mailOptions, function(err, data) {
-            if (err) {
-                console.log(err);
+                let htmlBody = '<p>' + content_tem + '</p>' + '<img src = "http://localhost:3000/images/girl.png' + '/?id=1" >';
+
+                let mailOptions = {
+                    from: email_com,
+                    to: email_cus,
+                    subject: name_compaign,
+                    text: "Our store's newest products",
+                    html: htmlBody,
+                    // attachments: [{
+                    //     path: "http://localhost:3000/images/girl.png"
+                    // }],
+                    // /img/tenha , param id của his , chèm id của his vô link img
+                    //  url có param id_his, img 
+                    //  trong vòng for kt mail có hoạt động không , nếu 
+                    // hoạt động => send, không thì
+                    // ? id=id_his
+
+
+                };
+
+
+
+
+                transporter.sendMail(mailOptions, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('Email sent successfully');
+                    }
+                });
+
             } else {
-                console.log('Email sent successfully');
+                console.log("sai");
+
             }
         });
+
+    },
+    updateStatusActHis: async(id) => {
+        try {
+            let QUERY = `update history
+            set status_action='o'
+            where id_his= ${id}`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
+        } catch (error) {
+            console.log("error:", error);
+            return error
+        }
     },
 
 

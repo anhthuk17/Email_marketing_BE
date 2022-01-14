@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();;
+const router = express.Router();
 const controller = require("../../src.web/controllers/compaign.controller");
 const response = require('../../utils/api.res/response');
+
 
 
 router.get("/listCam", async(req, res) => {
@@ -71,21 +72,7 @@ router.get("/listCus/:id/statusAction", async(req, res) => {
         response.error(res, "failed", 500)
     }
 });
-// router.get("/getInfToSendMail/:id_comapign/:id_com", async(req, res) => {
-//     const id_comapign = req.params.id_comapign;
-//     const id_com = req.params.id_com;
-//     try {
-//         const result = await controller.getInfToSendMail(id_comapign, id_com);
 
-//         console.log("*********************************************************************");
-//         console.log(res);
-//         response.success(res, "success", result)
-//     } catch (err) {
-//         console.log(err.message);
-//         response.error(res, "failed", 500)
-//     }
-
-// });
 
 router.get("/listCus/:id", async(req, res) => {
     console.log("=============================================");
@@ -99,19 +86,6 @@ router.get("/listCus/:id", async(req, res) => {
     }
 });
 
-// router.post("/sendMail/:id_compaign", async(req, res) => {
-//     // const id_compaign = req.params.id_compaign;
-//     try {
-//         // const result = await controller.getInfToSendMail(id_compaign);
-//         // const result1 = await controller.getSendMail(result);
-
-//         response.success(res, "success", result)
-//         // response.success(res, "success", result1)
-//     } catch (err) {
-//         console.log(err.message);
-//         response.error(res, "failed", 500)
-//     }
-// });
 
 router.post('/send', async(req, res) => {
     let id_compaign = req.body.id_compaign;
@@ -119,7 +93,7 @@ router.post('/send', async(req, res) => {
         const result = await controller.getInfToSendMail(id_compaign);
         response.success(res, "success", result)
         for (let i = 0; i <= result.length; i++) {
-            return await controller.getSendMail(result[i].email_com, result[i].password_com, result[i].address_com, result[i].phone_com, result[i].name_com, result[i].email_cus, result[i].name_cus, result[i].phone_cus, result[i].address_cus, result[i].name_compaign, result[i].content_tem);
+            return await controller.getSendMail(result[i].id_com, result[i].email_com, result[i].password_com, result[i].address_com, result[i].phone_com, result[i].name_com, result[i].id_cus, result[i].email_cus, result[i].name_cus, result[i].phone_cus, result[i].address_cus, result[i].id_compaign, result[i].name_compaign, result[i].content_tem);
         }
 
 
@@ -133,10 +107,8 @@ router.post('/send', async(req, res) => {
 
 
 
-
-
-
 module.exports = router;
+
 
 // hàm gủi : tt com, pass, e cus
 // hàm gủi cho 1 mail đơn lẻ

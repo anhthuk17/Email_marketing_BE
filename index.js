@@ -9,9 +9,32 @@ const db = require("./database/config");
 const cors = require("cors");
 const initAPI = require('./routers/')
 const ApiError = require('./utils/api.res/api.error');
+
+const router = express.Router();
+const controller = require("./src.web/controllers/compaign.controller");
+const response = require('./utils/api.res/response');
+
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);
 });
+app.use('/images', express.static(__dirname + '/images/'));
+app.get('/images/girl.png/', async(req, res) => {
+    // var id = request.query.id;
+    // response.end("I have received the ID: " + id);
+    const id = req.query.id;
+    try {
+        const result = await controller.updateStatusActHis(id);
+        response.success(res, "success", result)
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
+
+// app.get("/updateStatusActHis", async(req, res) => {
+
+// });
+
 const {
     message
 } = require('./utils//api.res')
@@ -54,9 +77,9 @@ app.use((req, res, next) => {
         app.get('/', function(req, res) {
             res.render("index.html");
         });
-        ``
+        // ``
     } else {
-        next(new ApiError(message.getMessage('status.notfound'), message.getMessage('http.notfound')));
+        // next(new ApiError(message.getMessage('status.notfound'), message.getMessage('http.notfound')));
     }
 });
 app.use(errorConverter);
