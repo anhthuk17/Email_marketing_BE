@@ -182,9 +182,7 @@ module.exports = {
         }
 
 
-        let htmlBody = '<p>' + content_tem + '</p>' +
-            '<img src = "https://email-marketing-01.herokuapp.com/images/girl.png' + '/?id=' + data1.find(x => x.id_his).id_his + '" >' +
-            'https://email-marketing-01.herokuapp.com/images/boy.png/?id=' + data1.find(x => x.id_his).id_his;
+        let htmlBody = '<p>' + content_tem + '</p>' + '<img src = "https://email-marketing-01.herokuapp.com/images/girl.png' + '/?id=' + data1.find(x => x.id_his).id_his + '" >';
         console.log(htmlBody);
         let mailOptions = {
             from: email_com,

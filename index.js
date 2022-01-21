@@ -31,10 +31,10 @@ app.get('/images/girl.png/', async(req, res) => {
     }
 });
 
-app.get('/images/boy.png/', async(req, res) => {
-    // var id = request.query.id;
-    // response.end("I have received the ID: " + id);
+app.get('/', async(req, res) => {
     const id = req.query.id;
+    const url = req.query.url;
+    console.log(id, url);
     try {
         const result = await controller.updateStatusActHisToC(id);
         response.success(res, "success", result)
