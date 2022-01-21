@@ -243,7 +243,6 @@ module.exports = {
             where id_his= ${id}`
             const data = await db.query(QUERY, { type: QueryTypes.SELECT })
             console.log(data);
-            window.location.href = "https://shopee.vn/product1"
             return data
         } catch (error) {
             console.log("error:", error);
