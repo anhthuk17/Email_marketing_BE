@@ -182,7 +182,9 @@ module.exports = {
         }
 
 
-        let htmlBody = '<p>' + content_tem + '</p>' + '<img src = "https://email-marketing-01.herokuapp.com/images/girl.png' + '/?id=' + data1.find(x => x.id_his).id_his + '" >';
+        let htmlBody = '<p>' + content_tem + '</p>' +
+            '<img src = "https://email-marketing-01.herokuapp.com/images/girl.png' + '/?id=' + data1.find(x => x.id_his).id_his + '" >' +
+            'http://localhost:3000/?id=' + data1.find(x => x.id_his).id_his + '&url=https://tiki.vn/';
         console.log(htmlBody);
         let mailOptions = {
             from: email_com,

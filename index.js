@@ -34,15 +34,15 @@ app.get('/images/girl.png/', async(req, res) => {
 app.get('/', async(req, res) => {
     const id = req.query.id;
     const url = req.query.url;
-    console.log(id, url);
     try {
+        res.redirect(301, 'http://localhost:8080/#/theme/whitepage/?id=' + id + '&url=' + url);
         const result = await controller.updateStatusActHisToC(id);
-        response.success(res, "success", result)
     } catch (err) {
         console.log(err.message);
         response.error(res, "failed", 500)
     }
 });
+
 
 const {
     message
