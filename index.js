@@ -4,7 +4,7 @@ const port = 3000
 require('dotenv').config()
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 const db = require("./database/config");
 const cors = require("cors");
 const initAPI = require('./routers/')
@@ -23,7 +23,7 @@ app.get('/images/girl.png/', async(req, res) => {
     // response.end("I have received the ID: " + id);
     const id = req.query.id;
     try {
-        const result = await controller.updateStatusActHis(id);
+        const result = await controller.updateStatusActHisToO(id);
         response.success(res, "success", result)
     } catch (err) {
         console.log(err.message);
@@ -31,9 +31,18 @@ app.get('/images/girl.png/', async(req, res) => {
     }
 });
 
-// app.get("/updateStatusActHis", async(req, res) => {
-
-// });
+app.get('/images/boy.png/', async(req, res) => {
+    // var id = request.query.id;
+    // response.end("I have received the ID: " + id);
+    const id = req.query.id;
+    try {
+        const result = await controller.updateStatusActHisToC(id);
+        response.success(res, "success", result)
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
 
 const {
     message

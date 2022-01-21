@@ -27,7 +27,10 @@ const Compaign = db.define("compaign", {
     },
     id_com: {
         type: Sequelize.INTEGER
-    }
+    },
+    related_campaign_id: {
+        type: Sequelize.INTEGER
+    },
 }, {
     timestamps: false,
     freezeTableName: true

@@ -61,9 +61,30 @@ module.exports = {
     },
     getManyStatusCus: async(id) => {
         try {
-            let QUERY = `select  history.sendOfDate, history.status_action, customer.id_cus,customer.name_cus, customer.address_cus, customer.email_cus, customer.phone_cus, customer.type_cus, customer.gender_cus, customer.age_cus from customer
+            let QUERY = `select  
+            history.sendOfDate, 
+            history.status_action, 
+            customer.id_cus,
+            customer.name_cus, 
+            customer.address_cus, 
+            customer.email_cus, 
+            customer.phone_cus, 
+            customer.type_cus, 
+            customer.gender_cus, 
+            customer.age_cus from customer
             right join history on customer.id_cus = history.id_cus 
             where history.id_compaign = ${id};`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
+        } catch (error) {
+            console.log("error:", error);
+            return error
+        }
+    },
+    getCamParent: async(id) => {
+        try {
+            let QUERY = `select name_compaign from compaign where id_compaign = ${id}`
             const data = await db.query(QUERY, { type: QueryTypes.SELECT })
             console.log(data);
             return data

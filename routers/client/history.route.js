@@ -62,5 +62,17 @@ router.get("/listCus/:id", async(req, res) => {
     }
 });
 
+router.get("/InfCam/:id", async(req, res) => {
+    console.log("=============================================");
+    const id = req.params.id;
+    try {
+        const result = await controller.getCamParent(id);
+        response.success(res, "success", result)
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
+
 
 module.exports = router;
