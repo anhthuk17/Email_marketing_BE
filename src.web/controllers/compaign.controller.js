@@ -238,6 +238,8 @@ module.exports = {
 
     updateStatusActHisToC: async(id) => {
         try {
+
+            window.location.href = "https://shopee.vn/product1"
             let QUERY = `update history
             set status_action='c'
             where id_his= ${id}`

@@ -30,19 +30,34 @@ app.get('/images/girl.png/', async(req, res) => {
         response.error(res, "failed", 500)
     }
 });
+// var proxy = require('http-proxy').createProxyServer({
+//     host: 'https://www.google.com/',
+//     // port: 80
+// });
+// app.use('/blog', function(req, res, next) {
+//     proxy.web(req, res, {
+//         target: 'https://www.google.com/'
+//     }, next);
+// });
+
+// app.listen(80, function() {
+//     console.log('Listening!');
+// });
 
 app.get('/images/boy.png/', async(req, res) => {
-    // var id = request.query.id;
-    // response.end("I have received the ID: " + id);
     const id = req.query.id;
+
     try {
         const result = await controller.updateStatusActHisToC(id);
-        response.success(res, "success", result)
+
+        // response.success(res, "success", result)
     } catch (err) {
         console.log(err.message);
         response.error(res, "failed", 500)
     }
+
 });
+
 
 const {
     message
