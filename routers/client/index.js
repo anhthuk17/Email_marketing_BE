@@ -3,6 +3,7 @@ const template = require('./template.route')
 const compaign = require('./compaign.route')
 const cus_compaign = require('./cus_compaign.route')
 const history = require('./history.route')
+const login = require('./login.route')
     // const nhomsanpham = require('./bk/nhomsanpham.route')
     // const khachhang = require('./bk/khachhang.route')
     // const dangnhap = require('./bk/dangnhap.route')
@@ -30,6 +31,7 @@ let initClientAPI = (app, url) => {
     app.use(url + "compaigns", compaign);
     app.use(url + "cus_compaigns", cus_compaign);
     app.use(url + "histories", history);
+    app.use(url + "logins", login);
     // -> api/customers
     // app.use(url + "categories", nhomsanpham);
     // app.use(url + "customers", khachhang);

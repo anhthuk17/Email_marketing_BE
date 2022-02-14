@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../../src.web/controllers/compaign.controller");
 const response = require('../../utils/api.res/response');
+var cron = require('node-cron');
 
 
 
@@ -104,7 +105,58 @@ router.post('/send', async(req, res) => {
     }
 
 });
+router.post('/setSchedule', async(req, res) => {
+    let id_compaign = req.body.id_compaign;
+    let datetime_req = req.body.datetime_req;
 
+    try {
+        const result = await controller.getInfToSendMail(id_compaign);
+        response.success(res, "success", result)
+        cron.schedule(datetime_req, async() => {
+            for (let i = 0; i <= result.length; i++) {
+                return await controller.getSendMail(result[i].id_com, result[i].email_com, result[i].password_com, result[i].address_com, result[i].phone_com, result[i].name_com, result[i].id_cus, result[i].email_cus, result[i].name_cus, result[i].phone_cus, result[i].address_cus, result[i].id_compaign, result[i].name_compaign, result[i].content_tem);
+            }
+        });
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+
+});
+router.get('/camStatistic/all', async(req, res) => {
+    try {
+        const result = await controller.CampaignStatistic();
+        response.success(res, "success", result)
+
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
+router.post('/updateTemOdCam', async(req, res) => {
+    let id_compaign = req.body.id_compaign;
+    let content_tem = req.body.content_tem;
+
+    try {
+        const result = await controller.updateTemOfCam(id_compaign, content_tem);
+        response.success(res, "success", result)
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+
+});
+router.post('/getChildCam', async(req, res) => {
+    let id_compaign = req.body.id_compaign;
+    try {
+        const result = await controller.getChildCam(id_compaign);
+        response.success(res, "success", result)
+
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
 
 
 module.exports = router;

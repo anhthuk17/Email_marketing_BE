@@ -46,14 +46,15 @@ module.exports = {
     getAll: async() => {
         try {
             let QUERY = `select count(id_cus) as count , compaign.*,
-                template.name_tem
+                template.name_tem,
+                template.id_tem
 				from  compaign 
                 inner join cus_compaign 
 				on cus_compaign.id_compaign = compaign.id_compaign
                 inner join template
                 on template.id_tem = compaign.id_tem
 				GROUP BY cus_compaign.id_compaign
-				HAVING COUNT(id_cus) > 1;`
+				HAVING COUNT(id_cus) >= 1;`
             const data = await db.query(QUERY, { type: QueryTypes.SELECT })
             console.log(data);
             return data
@@ -179,12 +180,13 @@ module.exports = {
                 console.log("error:", error);
                 return error
             }
+
+            content_tem = replaceAll(content_tem, "#idhistory", data1.find(x => x.id_his).id_his)
         }
 
 
         let htmlBody = '<p>' + content_tem + '</p>' +
-            '<img src = "https://email-marketing-01.herokuapp.com/images/girl.png' + '/?id=' + data1.find(x => x.id_his).id_his + '" >' +
-            'http://localhost:3000/?id=' + data1.find(x => x.id_his).id_his + '&url=https://tiki.vn/';
+            '<img src = "https://email-marketing-01.herokuapp.com/images/girl.png' + '/?id=' + data1.find(x => x.id_his).id_his + '" >';
         console.log(htmlBody);
         let mailOptions = {
             from: email_com,
@@ -203,24 +205,13 @@ module.exports = {
 
 
         };
-
-
-
-
         transporter.sendMail(mailOptions, function(err, data) {
             if (err) {
                 console.log(err);
             } else {
-                console.log('Email sent successfully');
+                console.log('Email sent successfully ====================================================================');
             }
         });
-
-        //     } else {
-        //         console.log("sai");
-
-        //     }
-        // });
-
     },
     updateStatusActHisToO: async(id) => {
         try {
@@ -249,6 +240,70 @@ module.exports = {
             return error
         }
     },
+    CampaignStatistic: async() => {
+        try {
+            let QUERY = `
+            select distinct h.id_compaign,
+            case 
+                when h1.clicked is null then 0 else h1.clicked end as clicked,
+            case 
+                when h2.openned is null then 0 else h2.openned end as openned,
+            case 
+                when h3.nothing is null then 0 else h3.nothing end as nothing,
+            c.name_compaign from history h
+            left join compaign c on c.id_compaign = h.id_compaign
+            left join (select distinct h1_in.id_compaign, count(h1_in.id_compaign) as clicked from history h1_in where h1_in.status_action= 'c' group by h1_in.id_compaign) h1 
+            on h.id_compaign = h1.id_compaign
+            left join (select distinct h2_in.id_compaign, count(h2_in.id_compaign) as openned from history h2_in where h2_in.status_action= 'o' group by h2_in.id_compaign) h2 
+            on h.id_compaign = h2.id_compaign
+            left join (select distinct h3_in.id_compaign, count(h3_in.id_compaign) as nothing from history h3_in where h3_in.status_action= 'n' group by h3_in.id_compaign) h3
+            on h.id_compaign = h3.id_compaign
+            order by clicked desc limit 10;`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
+        } catch (error) {
+            console.log("error:", error);
+            return error
+        }
+    },
+    updateTemOfCam: async(id_compaign, content_tem) => {
+        try {
+            let QUERY = `
+            UPDATE compaign
+            SET content_tem = '${content_tem}'
+            WHERE id_compaign = ${id_compaign};`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
+        } catch (error) {
+            console.log("error:", error);
+            return error
+        }
+
+    },
+    getChildCam: async(id_compaign) => {
+        try {
+            let QUERY = `
+            select count(id_cus) as count , campaign.*,
+                template.name_tem,
+                template.id_tem
+				from  (select c1.* from compaign c1 inner join compaign c2
+				on c1.related_campaign_id = c2.id_compaign where c2.id_compaign = ${id_compaign}) campaign
+                inner join cus_compaign 
+				on cus_compaign.id_compaign = campaign.id_compaign
+                inner join template
+                on template.id_tem = campaign.id_tem
+				GROUP BY cus_compaign.id_compaign`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
+        } catch (error) {
+            console.log("error:", error);
+            return error
+        }
+
+    }
 
 
 }

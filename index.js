@@ -7,12 +7,15 @@ const session = require("express-session");
 const PORT = process.env.PORT || 3002;
 const db = require("./database/config");
 const cors = require("cors");
+const mysql = require("mysql");
 const initAPI = require('./routers/')
 const ApiError = require('./utils/api.res/api.error');
 
 const router = express.Router();
 const controller = require("./src.web/controllers/compaign.controller");
 const response = require('./utils/api.res/response');
+
+app.use(cors());
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);

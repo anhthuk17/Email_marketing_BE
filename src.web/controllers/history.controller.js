@@ -64,6 +64,7 @@ module.exports = {
             let QUERY = `select  
             history.sendOfDate, 
             history.status_action, 
+            history.lastUpdate, 
             customer.id_cus,
             customer.name_cus, 
             customer.address_cus, 
