@@ -232,6 +232,7 @@ module.exports = {
     },
 
     updateStatusActHisToC: async(id) => {
+        // console.log(id);
         try {
             let QUERY = `update history
             set status_action='c'

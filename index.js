@@ -38,8 +38,10 @@ app.get('/', async(req, res) => {
     const id = req.query.id;
     const url = req.query.url;
     try {
-        await controller.updateStatusActHisToC(id);
-        res.redirect(301, 'http://localhost:8080/#/theme/whitepage/?id=' + id + '&url=' + url);
+        // res.header("no-cache")
+        res.redirect('http://localhost:8080/#/theme/whitepage/?id=' + id + '&url=' + url);
+        const result = await controller.updateStatusActHisToC(id);
+        response.success(res, "success", result)
 
     } catch (err) {
         console.log(err.message);
@@ -100,11 +102,11 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-app.get('/', (req, res) => {
-    res.send(`
-        <h1 style="color:red;">Hello World!</h1>
-        `)
-})
+// app.get('/', (req, res) => {
+//     res.send(`
+//         <h1 style="color:red;">Hello World!</h1>
+//         `)
+// })
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
