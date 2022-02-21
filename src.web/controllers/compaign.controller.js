@@ -218,10 +218,11 @@ module.exports = {
         });
     },
     updateStatusActHisToO: async(id) => {
+
         try {
             let QUERY = `update history
             set status_action='o'
-            where id_his= ${id}`
+            where id_his= ${id} and status_action not like 'c'`
             const data = await db.query(QUERY, { type: QueryTypes.SELECT })
             console.log(data);
             return data
