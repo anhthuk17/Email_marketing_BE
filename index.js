@@ -39,7 +39,7 @@ app.get('/', async(req, res) => {
     const url = req.query.url;
     try {
         // res.header("no-cache")
-        res.redirect('http://localhost:8080/#/theme/whitepage/?id=' + id + '&url=' + url);
+        res.redirect('https://email-marketing-01.herokuapp.com/?id=' + id + '&url=' + url);
         const result = await controller.updateStatusActHisToC(id);
         response.success(res, "success", result)
 
