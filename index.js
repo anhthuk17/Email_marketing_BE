@@ -38,10 +38,9 @@ app.get('/', async(req, res) => {
     const id = req.query.id;
     const url = req.query.url;
     try {
-        // res.header("no-cache")
-        res.redirect('https://email-marketing-01.herokuapp.com/?id=' + id + '&url=' + url);
         const result = await controller.updateStatusActHisToC(id);
-        response.success(res, "success", result)
+        res.redirect(url);
+        // response.success(res, "success", result)
 
     } catch (err) {
         console.log(err.message);
