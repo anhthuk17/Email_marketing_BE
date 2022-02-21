@@ -38,8 +38,9 @@ app.get('/', async(req, res) => {
     const id = req.query.id;
     const url = req.query.url;
     try {
+        await controller.updateStatusActHisToC(id);
         res.redirect(301, 'http://localhost:8080/#/theme/whitepage/?id=' + id + '&url=' + url);
-        const result = await controller.updateStatusActHisToC(id);
+
     } catch (err) {
         console.log(err.message);
         response.error(res, "failed", 500)

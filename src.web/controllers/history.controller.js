@@ -14,26 +14,37 @@ module.exports = {
         }
     },
     // disable congdichvu
-    disable: async(id) => {
+    // disable: async(id) => {
+    //     try {
+    //         return await history.update({
+    //             trangthai: ENUM.DISABLE
+    //         }, {
+    //             where: {
+    //                 id: id
+    //             }
+    //         })
+    //     } catch (error) {
+    //         return error
+    //     }
+    // },
+    disable: async(id_his) => {
         try {
-            return await history.update({
-                trangthai: ENUM.DISABLE
-            }, {
-                where: {
-                    id: id
-                }
-            })
+            let QUERY = `DELETE FROM history WHERE id_his = ${id_his};`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
         } catch (error) {
             return error
         }
     },
     // disable congdichvu
-    getAll: async() => {
+    getAll: async(id_com) => {
         try {
             let QUERY = `
             select count(history.id_cus) as count, compaign.*, template.*, history.* from history
 				left join compaign on compaign.id_compaign = history.id_compaign 
                 left join template on template.id_tem = compaign.id_tem
+                where compaign.id_com = ${id_com}
             group by history.id_compaign;`
             const data = await db.query(QUERY, { type: QueryTypes.SELECT })
             console.log(data);

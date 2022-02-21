@@ -17,15 +17,19 @@ module.exports = {
         }
     },
     // disable congdichvu
-    disable: async(id) => {
+    disable: async(id_compaign) => {
         try {
-            return await compaign.update({
-                trangthai: ENUM.DISABLE
-            }, {
-                where: {
-                    id: id
-                }
-            })
+            let QUERY1 = `
+            SET FOREIGN_KEY_CHECKS=0;`
+            let QUERY2 = `
+            DELETE FROM compaign WHERE id_compaign = ${id_compaign};`
+            let QUERY3 = `
+            SET FOREIGN_KEY_CHECKS=1;`
+            const data = await db.query(QUERY1, { type: QueryTypes.SELECT })
+            data = await db.query(QUERY2, { type: QueryTypes.SELECT })
+            data = await db.query(QUERY3, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
         } catch (error) {
             return error
         }
@@ -43,7 +47,7 @@ module.exports = {
             return error
         }
     },
-    getAll: async() => {
+    getAll: async(id_com) => {
         try {
             let QUERY = `select count(id_cus) as count , compaign.*,
                 template.name_tem,
@@ -54,7 +58,7 @@ module.exports = {
                 inner join template
                 on template.id_tem = compaign.id_tem
 				GROUP BY cus_compaign.id_compaign
-				HAVING COUNT(id_cus) >= 1;`
+				HAVING COUNT(id_cus) >= 1 and id_com= ${id_com}`
             const data = await db.query(QUERY, { type: QueryTypes.SELECT })
             console.log(data);
             return data
@@ -168,8 +172,8 @@ module.exports = {
             content_tem = replaceAll(content_tem, "#com_phone#", phone_com)
             content_tem = replaceAll(content_tem, "#com_name#", name_com)
             try {
-                let QUERY = `INSERT INTO tha22979_em.history (sendOfDate, content_tem_after_replace, status_action, id_com, id_cus, id_compaign) 
-                            VALUES ( '2012-01-21 00:00:00', '${content_tem}', 'n', ${id_com}, ${id_cus}, ${id_compaign});`
+                let QUERY = `INSERT INTO tha22979_em.history ( content_tem_after_replace, status_action, id_com, id_cus, id_compaign) 
+                            VALUES ('${content_tem}', 'n', ${id_com}, ${id_cus}, ${id_compaign});`
                 var data = await db.query(QUERY, { type: QueryTypes.SELECT })
                 let QUERY1 = `SELECT id_his FROM history ORDER BY id_his DESC LIMIT 0, 1;`
                 var data1 = await db.query(QUERY1, { type: QueryTypes.SELECT })
@@ -303,7 +307,21 @@ module.exports = {
             return error
         }
 
-    }
+    },
+    update: async(id_compaign, name_compaign) => {
+        try {
+            let QUERY = `UPDATE compaign
+            SET name_compaign = '${name_compaign}'
+            WHERE id_compaign = ${id_compaign};`
+            const data = await db.query(QUERY, { type: QueryTypes.SELECT })
+            console.log(data);
+            return data
+        } catch (error) {
+            console.log("error:", error);
+            return error
+        }
+    },
+
 
 
 }

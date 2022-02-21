@@ -3,11 +3,15 @@ const { ENUM } = require('../../utils/index');
 const { Op, where, QueryTypes } = require("sequelize");
 const db = require("../../database/config");
 
+
 module.exports = {
     getOne: async(id) => {
         try {
             return await company.findOne({
-                where: {}
+                where: {
+
+
+                }
             })
         } catch (error) {
             return error
@@ -28,9 +32,13 @@ module.exports = {
         }
     },
     // disable congdichvu
-    getAll: async() => {
+    getAll: async(id_com) => {
         try {
-            return await company.findAll();
+            return await company.findAll({
+                where: {
+                    id_com: id_com
+                }
+            });
         } catch (error) {
             return error
         }

@@ -3,8 +3,9 @@ const router = express.Router();
 const controller = require("../../src.web/controllers/compaign.controller");
 const response = require('../../utils/api.res/response');
 var cron = require('node-cron');
-
-
+const jwt = require("jsonwebtoken");
+const config = require("config");
+const auth = require("../../middlewares/auth.middleware");
 
 router.get("/listCam", async(req, res) => {
     try {
@@ -15,11 +16,17 @@ router.get("/listCam", async(req, res) => {
         console.log(err.message);
         response.error(res, "failed", 500)
     }
+
 });
 
-router.get("/", async(req, res) => {
+router.get("/", auth, async(req, res) => {
+
     try {
-        const result = await controller.getAll();
+        // const token = req.header("Authorization");
+        // console.log(token);
+        // const user = jwt.verify(token, config.get("jwtSecret"));
+        // console.log(user.account);
+        const result = await controller.getAll(req.account.id_com);
         response.success(res, "success", result)
 
     } catch (err) {
@@ -152,6 +159,31 @@ router.post('/getChildCam', async(req, res) => {
         const result = await controller.getChildCam(id_compaign);
         response.success(res, "success", result)
 
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
+// update compaign
+router.put("/", async(req, res) => {
+    let id_compaign = req.body.id_compaign;
+    let name_compaign = req.body.name_compaign;
+    try {
+        const result = await controller.update(id_compaign, name_compaign);
+        response.success(res, "success", result)
+    } catch (err) {
+        console.log(err.message);
+        response.error(res, "failed", 500)
+    }
+});
+
+router.delete("/:id", async(req, res) => {
+    let id_compaign = req.params.id
+    console.log("----------------------------------------------------------");
+    console.log(id_compaign);
+    try {
+        const result = await controller.disable(id_compaign);
+        response.success(res, "success", result)
     } catch (err) {
         console.log(err.message);
         response.error(res, "failed", 500)
